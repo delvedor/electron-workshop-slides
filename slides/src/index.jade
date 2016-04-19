@@ -12,60 +12,183 @@ html
     article
 
       section
+        img(src="./images/LogoWebIsArt.png" style="width: 180px; height: auto; margin-bottom: 20px;")
         h1 Electron.js
+        h3 desktop app development
+        h4 by <a href="https://twitter.com/delvedor" target="_blank">Tomas Della Vedova</a>
 
-      section
-        h2 Keyboard Interaction
-        h3 Powered by <a href="https://github.com/markdalgleish/bespoke-keys">bespoke-keys</a>
-
-      section
-        h2 Touch Interaction
-        h3 Powered by <a href="https://github.com/markdalgleish/bespoke-touch">bespoke-touch</a>
-
-      section
-        h2 Responsive Slides
-        h3 Powered by <a href="https://github.com/markdalgleish/bespoke-scale">bespoke-scale</a>
-
-      section
-        h2 Bullet List
-        h3.bullet Powered by <a href="https://github.com/markdalgleish/bespoke-bullets">bespoke-bullets</a>
+      section(data-bespoke-hash="what-is-electron")
+        h2.bullet What is Electron.js?
         ul
-          li Bullet 1
-          li Bullet 2
-          li Bullet 3
+          li Build cross platform desktop apps with web technologies.
+          li Formerly known as Atom Shell. Made by GitHub.
+
+      section(data-bespoke-hash="alternatives")
+        h2 Alternatives
+        p.bullet Electron is not the only solution to build awesome desktop apps with web technologies.
+        ul
+          li <a href="https://github.com/nwjs/nw.js" target="_blank">NW.js</a>
+          li <a href="https://github.com/adobe/brackets-shell" target="_blank">brackets-shell</a>
+          li <a href="https://www.trueinteractions.com/" target="_blank">Tint</a>
 
       section
-        h2 Syntax Highlighting
-        h3 Powered by <a href="http://twitter.com/LeaVerou">Lea Verou</a>'s <a href="https://github.com/LeaVerou/prism">Prism</a>
+        h2.bullet Electron vs NWjs
+        ul
+          li Entry of Application
+          li Build System
+          li Node Integration
+          li Multi-context
+
+      section(data-bespoke-hash="history")
+        h2.bullet History
+        ul
+          li Started in January 2013
+          li Built initially for the Atom text editor
+          li Renamed from Atom-shell to Electron
+
+      section(data-bespoke-hash="docs")
+        h2.bullet Electron holy bible
+        ul
+          li <a href="https://github.com/electron/electron/tree/master/docs" target="_blank">Old Covenant - Docs</a>
+          li <a href="https://github.com/electron/electron/issues" target="_blank">New Covenant - Issues</a>
+
+      section(data-bespoke-hash="architecture")
+        h2.bullet Architecture
+        ul
+          li NodeJs
+          li Chromium
+          li libchromiumcontent / Brightray
+
+      section(data-bespoke-hash="process")
+        img(src="./images/electronProcess.png" style="width: 400px; height: auto;")
+
+      section(data-bespoke-hash="api")
+        img(src="./images/api.png" style="width: 400px; height: auto;")
+
+      section
+        h2.bullet What we will see today
+        ul
+          li app
+          li BrowserWindow
+          li ipc main/renderer
+          li menu
+          li <strike>&nbsp;screen&nbsp;</strike>
+          li useful stuff
+
+      section(data-bespoke-hash="app")
+        h2 App
         pre
           code.language-javascript.
-            bespoke.from('article', [
-              classes(),
-              keys(),
-              touch(),
-              bullets('li, .bullet')
-            ]);
+            // import the app module from electron
+            import { app } from 'electron'
+            // When application is read
+            app.on('ready', createWindow)
+            // when all the windows of the app are closed
+            app.on('window-all-closed', closeApp)
 
-      section(data-bespoke-hash='named-route')
-        h2 Named Route
-        h3 Powered by <a href="https://github.com/markdalgleish/bespoke-hash">bespoke-hash</a>
-        p Look up! This route has been named with a <em>'data-bespoke-hash'</em> attribute.
-
-      section.emphatic-text(data-bespoke-backdrop='emphatic')
-        h2 Emphatic Slide!
-        h3 Powered by <a href="https://github.com/markdalgleish/bespoke-backdrop">bespoke-backdrop</a>
+      section(data-bespoke-hash="browser-window")
+        h2 Browser Window
+        pre
+          code.language-javascript.
+            // import the BrowserWindow module from electron
+            import { BrowserWindow } from 'electron'
+            // create a new window
+            let window = new BrowserWindow(options)
+            // load an html file
+            window.loadURL(path)
+            // show chrome dev tools
+            window.webContents.openDevTools()
+            // window closed callback
+            window.on('closed', windowClosed)
 
       section
-        h2.bullet Just the beginning...
-        br
+        p.bullet Browser Window options?
         ul
-          li Edit <a href="http://jade-lang.com/">Jade</a> markup in <em>'src/index.jade'</em>
-          li Edit <a href="http://learnboost.github.io/stylus/">Stylus</a> styles in <em>'src/styles/main.styl'</em>
-          li Edit JavaScript in <em>'src/scripts/main.js'</em>
-        br
+          li <img src="./images/browser-options.png" style="width: 340px; height: auto; margin-top:-5px;" />
+
+      section(data-bespoke-hash="ipc")
+        h2 ipc
+        p Inter-process communication
+        p Is a tool that make possible communicate between renderer and main process.
+          Is divided in two modules, <strong>ipcMain</strong> and <strong>ipcRenderer</strong>
+        p Both ipcMain and ipcRenderer are instances if EventEmitter class.
+
+      section
+        h2 ipcMain
+        pre
+          code.language-javascript.
+            import { ipcMain } from 'electron'
+
+            ipcMain.on('asynchronous-message', (event, arg) => {
+              console.log(arg); // prints "ping"
+              event.sender.send('asynchronous-reply', 'pong')
+            })
+
+            ipcMain.on('synchronous-message', (event, arg) => {
+              console.log(arg)  // prints "ping"
+              event.returnValue = 'pong'
+            })
+
+      section
+        h2 ipcRenderer
+        pre
+          code.language-javascript.
+            import { ipcRenderer } from 'electron'
+
+            let msg = ipcRenderer.sendSync('synchronous-message', 'ping')
+            console.log(msg) // prints "pong"
+
+            ipcRenderer.on('asynchronous-reply', (event, arg) => {
+              console.log(arg); // prints "pong"
+            })
+
+            ipcRenderer.send('asynchronous-message', 'ping')
+
+      section(data-bespoke-hash="menu")
+        h2 Menu
+        p The menu class is used to create native menus that can be used as application menus and context menus.
+        p This module is a main process module which can be used in a render process via the remote module.
+        p Each menu consists of multiple menu items and each menu item can have a submenu.
+
+      section
+        pre
+          code.language-javascript.
+            // import Menu and Menu Item class
+            import { Menu, MenuItem } from 'electron'
+            // create a new instance of the menu
+            const menu = new Menu()
+            // add menu items
+            menu.append(new MenuItem(options))
+            menu.append(new MenuItem(options))
+            menu.append(new MenuItem(options))
+
+      section(data-bespoke-hash="useful")
+        h2 Useful stuff
+        pre
+          code.language-javascript.
+            console.log(process.platform) // 'darwin', 'freebsd', 'linux',
+                                          // 'sunos' or 'win32'
+
+      section(data-bespoke-hash="built-with")
+        h2.bullet Built with Electron
         ul
-          li
-            strong Enjoy! :)
-            a(href='http://twitter.com/markdalgleish')  -@markdalgleish
+          li Atom Editor
+          li Slack
+          li Microsoft VS Code
+          li Nuclide
+          li Strem.io
+          li Wordpress.com
+          li Postman
+          li Google Play Music
+          li Ionic Lab
+          li Brave Browser
+          li Rocket.chat
+          li This Presentation ;)
+
+      section
+        img(src="./images/LogoWebIsArt.png" style="width: 180px; height: auto; margin-bottom: 20px;")
+        h1 Thanks!
+        p @delvedor on <a href="https://twitter.com/delvedor" target="_blank">Twitter</a> and <a href="https://github.com/delvedor" target="_blank">GitHub</a>
+        p <a href="https://www.facebook.com/webisart.user.group/" target="_blank">facebook.com/webisart.user.group</a>
 
     script(src='build/build.js')

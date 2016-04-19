@@ -4,5 +4,38 @@
 // Import CSS from "node_modules" and "bower_components"
 // thanks to Stylus' "import css" and "paths" options
 
-@import 'prism/themes/prism-okaidia.css'
+@import 'prism/themes/prism-okaidia.css' // otherwise prism.css
 // Check out "bower_components/prism/themes/" for available themes
+
+slide_background = #fafafa
+
+// in case of problems with screen resolution
+// *
+//  font-size: 14px
+
+body
+  background: slide_background
+
+.bespoke-slide
+  background: slide_background
+
+.big-bullet
+  font-size: 1.4em
+
+pre
+  padding: 20px !important
+  border-radius: 5px !important
+
+.full-imgs
+  img
+    width: 100%
+    height: auto
+
+.left-align
+  text-align: left
+
+.right-align
+  text-align: right
+
+.small-text
+  font-size: 14px
