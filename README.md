@@ -1,1 +1,1 @@
-# electron-intro
+# electron-workshop

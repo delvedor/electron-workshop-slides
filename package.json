@@ -1,5 +1,5 @@
 {
-  "name": "electron-intro",
+  "name": "electron-workshop",
   "version": "1.0.0",
   "description": "Electronjs introduction - WebIsArt Workshop",
   "main": "lib/app/main.js",
