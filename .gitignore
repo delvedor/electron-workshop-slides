@@ -1,7 +1,10 @@
 node_modules
+bower_components
+dist
+bespoke-theme-*
 npm-debug.log
 
 .DS_Store
 
-lib/app
-lib/browser/javascript
+electron/lib/app
+electron/lib/browser/javascript
