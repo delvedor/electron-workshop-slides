@@ -3,13 +3,13 @@ html
   head
     meta(charset='utf-8')
     meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1')
-    title Electron.js
+    title Electron.js - WebIsArt workshop
 
     link(rel='stylesheet', type='text/css', href='build/build.css')
 
-  body
+  body(id="body")
 
-    article
+    article(id="article")
 
       section
         img(src="./images/LogoWebIsArt.png" style="width: 180px; height: auto; margin-bottom: 20px;")
@@ -18,10 +18,13 @@ html
         h4 by <a href="https://twitter.com/delvedor" target="_blank">Tomas Della Vedova</a>
 
       section(data-bespoke-hash="what-is-electron")
-        h2.bullet What is Electron.js?
+        img(src="./images/electron.svg" style="width: 400px; height: auto; margin-bottom: 30px;").bullet
         ul
-          li Build cross platform desktop apps with web technologies.
-          li Formerly known as Atom Shell. Made by GitHub.
+          li Build cross platform desktop apps with web technologies
+          li Formerly known as Atom Shell
+          li Made by GitHub
+          li <a href="http://electron.atom.io/" target="_blank">electron.atom.io</a>
+            <a href="https://github.com/electron/electron" target="_blank">github.com/electron</a>
 
       section(data-bespoke-hash="alternatives")
         h2 Alternatives
@@ -46,24 +49,26 @@ html
           li Built initially for the Atom text editor
           li Renamed from Atom-shell to Electron
 
+      section(data-bespoke-hash="architecture")
+        h2 How works Electron.js
+        h2 under the hood?
+
+      section
+        img(src="./images/architecture.png" style="width: 600px; height: auto;")
+
+      section(data-bespoke-hash="process")
+        img(src="./images/electronProcess.png" style="width: 400px; height: auto;").border-radius
+
       section(data-bespoke-hash="docs")
         h2.bullet Electron holy bible
         ul
           li <a href="https://github.com/electron/electron/tree/master/docs" target="_blank">Old Covenant - Docs</a>
           li <a href="https://github.com/electron/electron/issues" target="_blank">New Covenant - Issues</a>
 
-      section(data-bespoke-hash="architecture")
-        h2.bullet Architecture
-        ul
-          li NodeJs
-          li Chromium
-          li libchromiumcontent / Brightray
-
-      section(data-bespoke-hash="process")
-        img(src="./images/electronProcess.png" style="width: 400px; height: auto;")
-
       section(data-bespoke-hash="api")
-        img(src="./images/api.png" style="width: 400px; height: auto;")
+        h3.bullet APIs
+        ul
+          li <img src="./images/api.png" style="width: 370px; height: auto; margin-top: -25px" class="border-radius" />
 
       section
         h2.bullet What we will see today
@@ -81,7 +86,7 @@ html
           code.language-javascript.
             // import the app module from electron
             import { app } from 'electron'
-            // When application is read
+            // When application is ready
             app.on('ready', createWindow)
             // when all the windows of the app are closed
             app.on('window-all-closed', closeApp)
@@ -104,7 +109,7 @@ html
       section
         p.bullet Browser Window options?
         ul
-          li <img src="./images/browser-options.png" style="width: 340px; height: auto; margin-top:-5px;" />
+          li <img src="./images/browser-options.png" style="width: 340px; height: auto; margin-top:-5px;" class="border-radius" />
 
       section(data-bespoke-hash="ipc")
         h2 ipc
@@ -119,12 +124,12 @@ html
           code.language-javascript.
             import { ipcMain } from 'electron'
 
-            ipcMain.on('asynchronous-message', (event, arg) => {
+            ipcMain.on('async', (event, arg) => {
               console.log(arg); // prints "ping"
-              event.sender.send('asynchronous-reply', 'pong')
+              event.sender.send('async', 'pong')
             })
 
-            ipcMain.on('synchronous-message', (event, arg) => {
+            ipcMain.on('sync', (event, arg) => {
               console.log(arg)  // prints "ping"
               event.returnValue = 'pong'
             })
@@ -135,22 +140,25 @@ html
           code.language-javascript.
             import { ipcRenderer } from 'electron'
 
-            let msg = ipcRenderer.sendSync('synchronous-message', 'ping')
+            let msg = ipcRenderer.sendSync('sync', 'ping')
             console.log(msg) // prints "pong"
 
-            ipcRenderer.on('asynchronous-reply', (event, arg) => {
+            ipcRenderer.on('async', (event, arg) => {
               console.log(arg); // prints "pong"
             })
 
-            ipcRenderer.send('asynchronous-message', 'ping')
+            ipcRenderer.send('async', 'ping')
+
+      section
+        h2 webContents
+        pre
+          code.language-javascript.
+            // window is the BrowserWindow object
+            // webContents is a property of the window object
+            window.webContents.send('async', 'pong')
 
       section(data-bespoke-hash="menu")
         h2 Menu
-        p The menu class is used to create native menus that can be used as application menus and context menus.
-        p This module is a main process module which can be used in a render process via the remote module.
-        p Each menu consists of multiple menu items and each menu item can have a submenu.
-
-      section
         pre
           code.language-javascript.
             // import Menu and Menu Item class
@@ -162,12 +170,52 @@ html
             menu.append(new MenuItem(options))
             menu.append(new MenuItem(options))
 
+      section(data-bespoke-hash="screen")
+        h2 Screen
+        img(src="./images/itsworking.gif" style="width: 500px; height: auto; margin-top: 20px").border-radius
+
+      section
+        h2.bullet Windows
+        ul
+          li Yes, the OS
+          li <img src="./images/windows.gif" style="width: 350px; height: auto; margin-top: 20px" class="border-radius" />
+
       section(data-bespoke-hash="useful")
         h2 Useful stuff
+        h3 process.platform
         pre
           code.language-javascript.
-            console.log(process.platform) // 'darwin', 'freebsd', 'linux',
-                                          // 'sunos' or 'win32'
+            console.log(process.platform)
+            // 'darwin', 'freebsd', 'linux',
+            // 'sunos' or 'win32'
+
+      section
+        h3 File system
+        pre.small-text
+          code.language-javascript.
+            const fs = require('fs')
+            // read some file
+            fs.readFile('file.md', 'utf8', (readErr, data) => {
+              if (readErr) return console.log(readErr)
+              // change something
+              data = changeSomething(data)
+              // write the new content
+              fs.writeFile('file.md', data, 'utf8', (writeErr) => {
+                if (writeErr) return console.log(writeErr)
+                console.log('done')
+              })
+            })
+
+      section
+        h3 Streams
+        pre
+          code.language-javascript.
+            const selfStream = require('self-stream')
+            const transform = function () { ... }
+            selfStream('file.md', transform, (err) => {
+              if (err) return console.log(err)
+            })
+        <a href="https://github.com/delvedor/self-stream" target="_blank">self-stream</a>
 
       section(data-bespoke-hash="built-with")
         h2.bullet Built with Electron
@@ -183,7 +231,13 @@ html
           li Ionic Lab
           li Brave Browser
           li Rocket.chat
-          li This Presentation ;)
+          li <strong>This Presentation ;)</strong>
+
+      section
+        h2 Let's code!
+        pre
+          code.small-text
+            $ git clone https://github.com/delvedor/electron-workshop.git
 
       section
         img(src="./images/LogoWebIsArt.png" style="width: 180px; height: auto; margin-bottom: 20px;")
@@ -191,4 +245,4 @@ html
         p @delvedor on <a href="https://twitter.com/delvedor" target="_blank">Twitter</a> and <a href="https://github.com/delvedor" target="_blank">GitHub</a>
         p <a href="https://www.facebook.com/webisart.user.group/" target="_blank">facebook.com/webisart.user.group</a>
 
-    script(src='build/build.js')
+        script(src='build/build.js')

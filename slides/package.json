@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "author": "Tomas Della Vedova - @delvedor (http://delved.org)",
   "dependencies": {},
+  "private": true,
   "devDependencies": {
     "bespoke": "^1.0.0",
     "bespoke-backdrop": "^1.0.0",
