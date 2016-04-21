@@ -4,7 +4,6 @@ dist
 bespoke-theme-*
 npm-debug.log
 
-.DS_Store
+electron/browser/
 
-electron/lib/app
-electron/lib/browser/javascript
+.DS_Store
