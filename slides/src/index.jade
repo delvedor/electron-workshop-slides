@@ -7,9 +7,9 @@ html
 
     link(rel='stylesheet', type='text/css', href='build/build.css')
 
-  body(id="body")
+  body
 
-    article(id="article")
+    article
 
       section
         img(src="./images/LogoWebIsArt.png" style="width: 180px; height: auto; margin-bottom: 20px;")
@@ -17,14 +17,22 @@ html
         h3 desktop app development
         h4 by <a href="https://twitter.com/delvedor" target="_blank">Tomas Della Vedova</a>
 
+      section
+        h2.bullet What we will see today
+        ul
+          li Introduction to Electron
+          li Electron Architecture
+          li Electron's APIs
+          li <em>My experience</em>
+          li Coding session
+
       section(data-bespoke-hash="what-is-electron")
         img(src="./images/electron.svg" style="width: 400px; height: auto; margin-bottom: 30px;").bullet
         ul
           li Build cross platform desktop apps with web technologies
           li Formerly known as Atom Shell
           li Made by GitHub
-          li <a href="http://electron.atom.io/" target="_blank">electron.atom.io</a>
-            <a href="https://github.com/electron/electron" target="_blank">github.com/electron</a>
+          li <a href="http://electron.atom.io/" target="_blank">electron.atom.io</a><br/><a href="https://github.com/electron/electron" target="_blank">github.com/electron</a>
 
       section(data-bespoke-hash="alternatives")
         h2 Alternatives
@@ -70,22 +78,12 @@ html
         ul
           li <img src="./images/api.png" style="width: 370px; height: auto; margin-top: -25px" class="border-radius" />
 
-      section
-        h2.bullet What we will see today
-        ul
-          li app
-          li BrowserWindow
-          li ipc main/renderer
-          li menu
-          li <strike>&nbsp;screen&nbsp;</strike>
-          li useful stuff
-
       section(data-bespoke-hash="app")
         h2 App
         pre
           code.language-javascript.
             // import the app module from electron
-            import { app } from 'electron'
+            const app = require('electron').app
             // When application is ready
             app.on('ready', createWindow)
             // when all the windows of the app are closed
@@ -96,7 +94,7 @@ html
         pre
           code.language-javascript.
             // import the BrowserWindow module from electron
-            import { BrowserWindow } from 'electron'
+            const BrowserWindow = require('electron').BrowserWindow
             // create a new window
             let window = new BrowserWindow(options)
             // load an html file
@@ -122,10 +120,10 @@ html
         h2 ipcMain
         pre
           code.language-javascript.
-            import { ipcMain } from 'electron'
+            const ipcMain = require('electron').ipcMain
 
             ipcMain.on('async', (event, arg) => {
-              console.log(arg); // prints "ping"
+              console.log(arg) // prints "ping"
               event.sender.send('async', 'pong')
             })
 
@@ -138,16 +136,16 @@ html
         h2 ipcRenderer
         pre
           code.language-javascript.
-            import { ipcRenderer } from 'electron'
+            const ipcRenderer = require('electron').ipcRenderer
 
             let msg = ipcRenderer.sendSync('sync', 'ping')
             console.log(msg) // prints "pong"
 
-            ipcRenderer.on('async', (event, arg) => {
-              console.log(arg); // prints "pong"
-            })
-
             ipcRenderer.send('async', 'ping')
+
+            ipcRenderer.on('async', (event, arg) => {
+              console.log(arg) // prints "pong"
+            })
 
       section
         h2 webContents
@@ -157,12 +155,18 @@ html
             // webContents is a property of the window object
             window.webContents.send('async', 'pong')
 
+            window.webContents.sendInputEvent({
+              type: 'keyDown',
+              keyCode: 'Left'
+            })
+
       section(data-bespoke-hash="menu")
         h2 Menu
         pre
           code.language-javascript.
             // import Menu and Menu Item class
-            import { Menu, MenuItem } from 'electron'
+            const Menu = require('electron').Menu
+            const MenuItem = require('electron').MenuItem
             // create a new instance of the menu
             const menu = new Menu()
             // add menu items
@@ -170,52 +174,65 @@ html
             menu.append(new MenuItem(options))
             menu.append(new MenuItem(options))
 
-      section(data-bespoke-hash="screen")
-        h2 Screen
-        img(src="./images/itsworking.gif" style="width: 500px; height: auto; margin-top: 20px").border-radius
-
-      section
-        h2.bullet Windows
+      section(data-bespoke-hash="my-experience")
+        h2.bullet My experience
         ul
-          li Yes, the OS
-          li <img src="./images/windows.gif" style="width: 350px; height: auto; margin-top: 20px" class="border-radius" />
-
-      section(data-bespoke-hash="useful")
-        h2 Useful stuff
-        h3 process.platform
-        pre
-          code.language-javascript.
-            console.log(process.platform)
-            // 'darwin', 'freebsd', 'linux',
-            // 'sunos' or 'win32'
+          li Cross platform is <strong>goodness</strong>
+          li Cross platform is <strong>hell</strong>
 
       section
-        h3 File system
+        h3 My experience
+        p More we go deeper with the interaction between Electron and the OS, more we gain problems.
+        img(src="./images/itsworking.gif" style="width: 400px; height: auto; margin-top: 20px").border-radius
+
+      section
+        h3 My experience
+        p Modularize everything and create internal, OS agnostic, APIs
         pre.small-text
           code.language-javascript.
-            const fs = require('fs')
-            // read some file
-            fs.readFile('file.md', 'utf8', (readErr, data) => {
-              if (readErr) return console.log(readErr)
-              // change something
-              data = changeSomething(data)
-              // write the new content
-              fs.writeFile('file.md', data, 'utf8', (writeErr) => {
-                if (writeErr) return console.log(writeErr)
-                console.log('done')
-              })
-            })
+            // returns the path of the configuration folder
+            function confFolder () {
+              return process.platform === 'win32' ? 'win\path' : 'mac/path'
+            }
 
       section
-        h3 Streams
+        h3 My experience
+        p By convention Windows saves the configuration file inside the executable folder, while Mac and Linux have to create a hidden folder in the user's home.
         pre
           code.language-javascript.
-            const selfStream = require('self-stream')
-            const transform = function () { ... }
-            selfStream('file.md', transform, (err) => {
-              if (err) return console.log(err)
-            })
-        <a href="https://github.com/delvedor/self-stream" target="_blank">self-stream</a>
+            let fconf = path.join(confFolder(), 'config.json')
+            const conf = require(fconf)
+
+      section
+        h3 My experience
+        p Some native third-party modules are compatible with a single OS
+        img(src="./images/singleos.gif" style="width: 300px; height: auto; margin-top: 20px").border-radius
+
+      section
+        h3 My experience
+        p You will write tons of quickfix
+        img(src="./images/quickfix.gif" style="width: 350px; height: auto; margin-bottom: 30px").border-radius.bullet
+        ul
+          li Code refactor will be your best friend
+
+      section
+        h3 My experience
+        ul
+          li If you design pixel calculated windows pay attention, because Mac creates a window of a specific dimension plus the header.
+          li <strong>Windows will not.</strong>
+
+      section
+        h3 My experience
+        p Create a Windows installer is damn hard.
+        img(src="./images/winInstaller.gif" style="width: 250px; height: auto; margin-top: 20px").border-radius
+
+      section
+        h3 My experience
+        p Work with screen API under Windows is a <span style="color: #B71C1C"><strong>bloody mess</strong><span>.
+        img(src="./images/screen.gif" style="width: 350px; height: auto; margin-bottom: 20px").border-radius.bullet
+        ul
+          li <strong>Work with Windows in general, is a mess.</strong>
+
 
       section(data-bespoke-hash="built-with")
         h2.bullet Built with Electron
@@ -235,9 +252,12 @@ html
 
       section
         h2 Let's code!
-        pre
+        pre.left-align
           code.small-text
             $ git clone https://github.com/delvedor/electron-workshop.git
+            $ cd electron-workshop
+            $ npm install
+            $ npm start
 
       section
         img(src="./images/LogoWebIsArt.png" style="width: 180px; height: auto; margin-bottom: 20px;")
