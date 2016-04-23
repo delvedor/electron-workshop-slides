@@ -1,0 +1,9 @@
+node_modules
+bower_components
+dist
+bespoke-theme-*
+npm-debug.log
+
+electron/browser/
+
+.DS_Store

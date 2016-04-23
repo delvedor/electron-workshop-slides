@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controller</title>
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+        background-color: #212121;
+        color: #fafafa;
+      }
+      button {
+        height: 95%;
+        width: 50%;
+        margin: 0 auto;
+        float: left;
+        font-size: 5em;
+        background-color: #212121;
+        color: #fafafa;
+      }
+      button:active {
+        background-color: #616161;
+        color: #ffffff;
+      }
+      #controller {
+        height: 5%;
+        width: 100%;
+        font-size: 1.6em;
+        font-family: 'Helvetica', sans-serif;
+        text-align: center;
+        text-transform: uppercase;
+        background-color: #212121;
+        color: #fafafa;
+      }
+      * {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+      *:focus {
+        outline: none;
+      }
+    </style>
+</head>
+<body>
+    <p id="controller">Electron Controller</p>
+    <button id ="B" type="button" onclick="sendCmd('backward')">&lt;</button>
+    <button id ="F" type="button" onclick="sendCmd('forward')">&gt;</button>
+    <script>
+      function sendCmd (cmd) {
+        httpGet(cmd)
+      }
+
+      function httpGet(path) {
+        var xmlHttp = new XMLHttpRequest()
+        // xmlHttp.open( 'GET', `http://192.168.20.62:3000/${path}`)
+        xmlHttp.open( 'GET', `http://localhost:3000/${path}`)
+        xmlHttp.send( null )
+        // return xmlHttp.responseText
+      }
+    </script>
+</body>
+</html>

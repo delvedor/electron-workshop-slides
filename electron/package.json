@@ -1,0 +1,27 @@
+{
+  "name": "electron-workshop",
+  "version": "1.0.0",
+  "description": "Electronjs introduction - WebIsArt Workshop",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "clean": "rm -rf browser/*",
+    "build": "npm run clean && cp -r ../slides/dist/* browser/"
+  },
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/delvedor/electron-intro.git"
+  },
+  "keywords": [],
+  "author": "Tomas Della Vedova - @delvedor (http://delved.org)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/delvedor/electron-intro/issues"
+  },
+  "homepage": "https://github.com/delvedor/electron-intro#readme",
+  "devDependencies": {
+    "electron-prebuilt": "^0.37.6"
+  },
+  "dependencies": {}
+}
