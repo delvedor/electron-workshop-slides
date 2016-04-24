@@ -34,6 +34,13 @@ html
           li Made by GitHub
           li <a href="http://electron.atom.io/" target="_blank">electron.atom.io</a><br/><a href="https://github.com/electron/electron" target="_blank">github.com/electron</a>
 
+      section(data-bespoke-hash="history")
+        h2.bullet History
+        ul
+          li Started in January 2013
+          li Built initially for the Atom text editor
+          li Renamed from Atom-shell to Electron
+
       section(data-bespoke-hash="alternatives")
         h2 Alternatives
         p.bullet Electron is not the only solution to build awesome desktop apps with web technologies.
@@ -49,13 +56,6 @@ html
           li Build System
           li Node Integration
           li Multi-context
-
-      section(data-bespoke-hash="history")
-        h2.bullet History
-        ul
-          li Started in January 2013
-          li Built initially for the Atom text editor
-          li Renamed from Atom-shell to Electron
 
       section(data-bespoke-hash="architecture")
         h2 How works Electron.js
@@ -78,6 +78,14 @@ html
         ul
           li <img src="./images/api.png" style="width: 370px; height: auto; margin-top: -25px" class="border-radius" />
 
+      section
+        h3.bullet APIs
+        ul
+          li app
+          li BrowserWindow
+          li ipc Main/Renderer
+          li Menu
+
       section(data-bespoke-hash="app")
         h2 App
         pre
@@ -98,7 +106,7 @@ html
             // create a new window
             let window = new BrowserWindow(options)
             // load an html file
-            window.loadURL(path)
+            window.loadURL(path/to/html)
             // show chrome dev tools
             window.webContents.openDevTools()
             // window closed callback
