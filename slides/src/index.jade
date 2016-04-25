@@ -128,14 +128,14 @@ html
         h2 ipcMain
         pre
           code.language-javascript.
-            const ipcMain = require('electron').ipcMain
+            const ipc = require('electron').ipcMain
 
-            ipcMain.on('async', (event, arg) => {
+            ipc.on('async', (event, arg) => {
               console.log(arg) // prints "ping"
               event.sender.send('async', 'pong')
             })
 
-            ipcMain.on('sync', (event, arg) => {
+            ipc.on('sync', (event, arg) => {
               console.log(arg)  // prints "ping"
               event.returnValue = 'pong'
             })
@@ -144,14 +144,14 @@ html
         h2 ipcRenderer
         pre
           code.language-javascript.
-            const ipcRenderer = require('electron').ipcRenderer
+            const ipc = require('electron').ipcRenderer
 
-            let msg = ipcRenderer.sendSync('sync', 'ping')
+            let msg = ipc.sendSync('sync', 'ping')
             console.log(msg) // prints "pong"
 
-            ipcRenderer.send('async', 'ping')
+            ipc.send('async', 'ping')
 
-            ipcRenderer.on('async', (event, arg) => {
+            ipc.on('async', (event, arg) => {
               console.log(arg) // prints "pong"
             })
 
@@ -239,7 +239,8 @@ html
         p Work with screen API under Windows is a <span style="color: #B71C1C"><strong>bloody mess</strong><span>.
         img(src="./images/screen.gif" style="width: 350px; height: auto; margin-bottom: 20px").border-radius.bullet
         ul
-          li <strong>Work with Windows in general, is a mess.</strong>
+          li If you really need to work with screen under Windows you can use <a href="https://github.com/delvedor/electron-screen" target="_blank">electron-screen</a> module
+          li <strong>Interact with Windows in general, is a mess.</strong>
 
 
       section(data-bespoke-hash="built-with")
@@ -257,6 +258,10 @@ html
           li Brave Browser
           li Rocket.chat
           li <strong>This Presentation ;)</strong>
+
+      section
+        h4 How works this presentation
+        img(src="./images/how-slides.png" style="width: 600px; height: auto; margin-top: -30px")
 
       section
         h2 Let's code!
