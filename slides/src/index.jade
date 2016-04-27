@@ -84,6 +84,7 @@ html
           li app
           li BrowserWindow
           li ipc Main/Renderer
+          li webContents
           li Menu
 
       section(data-bespoke-hash="app")
@@ -196,12 +197,31 @@ html
       section
         h3 My experience
         p Modularize everything and create internal, OS agnostic, APIs
-        pre.small-text
+        pre.small-text.bullet
           code.language-javascript.
             // returns the path of the configuration folder
             function confFolder () {
               return process.platform === 'win32' ? 'win\path' : 'mac/path'
             }
+
+      section
+        h3 Talking about APIs
+        ul
+          li You can build <strong>isomorphic</strong> APIs by using <em>Remote</em> API.
+          li You can take advantage of <a href="https://github.com/delvedor/is-electron" target="_blank">is-electron</a> module.
+          li
+            pre.small-text
+              code.language-javascript.
+                function closeApp () {
+                  const e = require('electron')
+                  if (is.main()) { // main process
+                    e.app.close()
+                  } else { // renderer process
+                    e.remote.app.close()
+                  }
+                }
+                is.main() ? exports.closeApp = closeApp :
+                            window.closeApp = closeApp
 
       section
         h3 My experience
@@ -239,7 +259,7 @@ html
         p Work with screen API under Windows is a <span style="color: #B71C1C"><strong>bloody mess</strong><span>.
         img(src="./images/screen.gif" style="width: 350px; height: auto; margin-bottom: 20px").border-radius.bullet
         ul
-          li If you really need to work with screen under Windows you can use <a href="https://github.com/delvedor/electron-screen" target="_blank">electron-screen</a> module
+          li If you really need to work with screen under Windows<br/>you can use <a href="https://github.com/delvedor/electron-screen" target="_blank">electron-screen</a> module
           li <strong>Interact with Windows in general, is a mess.</strong>
 
 
@@ -261,7 +281,7 @@ html
 
       section
         h4 How works this presentation
-        img(src="./images/how-slides.png" style="width: 600px; height: auto; margin-top: -30px")
+        img(src="./images/how-slides.png" style="width: 600px; height: auto; margin-top: 10px;").border-radius
 
       section
         h2 Let's code!
