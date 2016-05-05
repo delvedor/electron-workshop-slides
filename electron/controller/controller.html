@@ -60,9 +60,9 @@
 
       function httpGet(path) {
         var xmlHttp = new XMLHttpRequest()
-        // xmlHttp.open( 'GET', `http://192.168.20.62:3000/${path}`)
-        xmlHttp.open( 'GET', `http://localhost:3000/${path}`)
-        xmlHttp.send( null )
+        xmlHttp.open('GET', `http://192.168.20.62:3000/${path}`)
+        // xmlHttp.open( 'GET', `http://localhost:3000/${path}`)
+        xmlHttp.send(null)
         // return xmlHttp.responseText
       }
     </script>

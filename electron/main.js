@@ -1,8 +1,8 @@
 'use strict'
 
-const app = require('electron').app
-const BrowserWindow = require('electron').BrowserWindow
-const join = require('path').join
+const { app, BrowserWindow } = require('electron')
+const { join } = require('path')
+const is = require('is-electron')
 const server = require('./controller/server')
 
 let mainWindow
@@ -12,8 +12,13 @@ function createWindow () {
     width: 800,
     height: 600
   })
-  // mainWindow.loadURL(join('file://', __dirname, 'browser', 'index.html'))
-  mainWindow.loadURL('http://localhost:8080/')
+
+  if (is.production()) {
+    mainWindow.loadURL(join('file://', __dirname, 'browser', 'index.html'))
+  } else {
+    mainWindow.loadURL('http://localhost:8080/')
+  }
+
   mainWindow.on('closed', function windowClosed () {
     mainWindow = null
   })
@@ -23,7 +28,7 @@ function createWindow () {
 app.on('ready', createWindow)
 
 app.on('window-all-closed', function allWindowClosed () {
-  if (process.platform !== 'darwin') {
+  if (!is.mac()) {
     app.quit()
   }
 })
@@ -33,5 +38,3 @@ app.on('activate', function activateWindow () {
     createWindow()
   }
 })
-
-exports.mainWindow = mainWindow
