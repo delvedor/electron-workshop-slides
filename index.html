@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Electron.js - WebIsArt workshop</title>
+    <link rel="stylesheet" type="text/css" href="build/build.css">
+  </head>
+  <body>
+    <article>
+      <section><img src="./images/LogoWebIsArt.png" style="width: 180px; height: auto; margin-bottom: 20px;">
+        <h1>Electron.js</h1>
+        <h3>desktop app development</h3>
+        <h4>by <a href="https://twitter.com/delvedor" target="_blank">Tomas Della Vedova</a></h4>
+      </section>
+      <section>
+        <h2 class="bullet">What we will see today</h2>
+        <ul>
+          <li>Introduction to Electron</li>
+          <li>Electron Architecture</li>
+          <li>Electron's APIs</li>
+          <li><em>My experience</em></li>
+          <li>Coding session</li>
+        </ul>
+      </section>
+      <section data-bespoke-hash="what-is-electron"><img src="./images/electron.svg" style="width: 400px; height: auto; margin-bottom: 30px;" class="bullet">
+        <ul>
+          <li>Build cross platform desktop apps with web technologies</li>
+          <li>Formerly known as Atom Shell</li>
+          <li>Made by GitHub</li>
+          <li><a href="http://electron.atom.io/" target="_blank">electron.atom.io</a><br/><a href="https://github.com/electron/electron" target="_blank">github.com/electron</a></li>
+        </ul>
+      </section>
+      <section data-bespoke-hash="history">
+        <h2 class="bullet">History</h2>
+        <ul>
+          <li>Started in January 2013</li>
+          <li>Built initially for the Atom text editor</li>
+          <li>Renamed from Atom-shell to Electron</li>
+        </ul>
+      </section>
+      <section data-bespoke-hash="alternatives">
+        <h2>Alternatives</h2>
+        <p class="bullet">Electron is not the only solution to build awesome desktop apps with web technologies.</p>
+        <ul>
+          <li><a href="https://github.com/nwjs/nw.js" target="_blank">NW.js</a></li>
+          <li><a href="https://github.com/adobe/brackets-shell" target="_blank">brackets-shell</a></li>
+          <li><a href="https://www.trueinteractions.com/" target="_blank">Tint</a></li>
+        </ul>
+      </section>
+      <section>
+        <h2 class="bullet">Electron vs NWjs</h2>
+        <ul>
+          <li>Entry of Application</li>
+          <li>Build System</li>
+          <li>Node Integration</li>
+          <li>Multi-context</li>
+          <li class="small-text"><em>Check <a href="https://github.com/electron/electron/blob/master/docs/development/atom-shell-vs-node-webkit.md" target="_blank">here</a></em></li>
+        </ul>
+      </section>
+      <section data-bespoke-hash="architecture">
+        <h2>How works Electron.js</h2>
+        <h2>under the hood?</h2>
+      </section>
+      <section><img src="./images/architecture.png" style="width: 600px; height: auto;"></section>
+      <section data-bespoke-hash="process"><img src="./images/electronProcess.png" style="width: 400px; height: auto;" class="border-radius"></section>
+      <section data-bespoke-hash="docs">
+        <h2 class="bullet">Electron holy bible</h2>
+        <ul>
+          <li><a href="https://github.com/electron/electron/tree/master/docs" target="_blank">Old Covenant - Docs</a></li>
+          <li><a href="https://github.com/electron/electron/issues" target="_blank">New Covenant - Issues</a></li>
+        </ul>
+      </section>
+      <section data-bespoke-hash="api">
+        <h3 class="bullet">APIs</h3>
+        <ul>
+          <li><img src="./images/api.png" alt="api" style="width: 370px; height: auto; margin-top: -25px" class="border-radius" /></li>
+        </ul>
+      </section>
+      <section>
+        <h3 class="bullet">APIs</h3>
+        <ul>
+          <li>app</li>
+          <li>BrowserWindow</li>
+          <li>ipc Main/Renderer</li>
+          <li>webContents</li>
+          <li>Menu</li>
+        </ul>
+      </section>
+      <section data-bespoke-hash="app">
+        <h2>App</h2>
+        <pre><code class="language-javascript">// import the app module from electron
+const { app } = require('electron')
+// When application is ready
+app.on('ready', createWindow)
+// when all the windows of the app are closed
+app.on('window-all-closed', closeApp)
+</code></pre>
+      </section>
+      <section data-bespoke-hash="browser-window">
+        <h2>Browser Window</h2>
+        <pre><code class="language-javascript">// import the BrowserWindow module from electron
+const { BrowserWindow } = require('electron')
+// create a new window
+let window = new BrowserWindow(options)
+// load an html file
+window.loadURL(path/to/html)
+// show chrome dev tools
+window.webContents.openDevTools()
+// window closed callback
+window.on('closed', windowClosed)
+</code></pre>
+      </section>
+      <section>
+        <p class="bullet">Browser Window options?</p>
+        <ul>
+          <li><img src="./images/browser-options.png" alt="browser options" style="width: 340px; height: auto; margin-top:-5px;" class="border-radius" /></li>
+        </ul>
+      </section>
+      <section data-bespoke-hash="ipc">
+        <h2>ipc</h2>
+        <p>Inter-process communication</p>
+        <p>Is a tool that make possible communicate between renderer and main process.
+          <Is>divided in two modules, <strong>ipcMain</strong> and <strong>ipcRenderer</strong></Is>
+        </p>
+        <p>Both ipcMain and ipcRenderer are instances if EventEmitter class.</p>
+      </section>
+      <section>
+        <h2>ipcMain</h2>
+        <pre><code class="language-javascript">const { ipcMain: ipc } = require('electron')
+
+ipc.on('async', (event, arg) => {
+  console.log(arg) // prints "ping"
+  event.sender.send('async', 'pong')
+})
+
+ipc.on('sync', (event, arg) => {
+  console.log(arg)  // prints "ping"
+  event.returnValue = 'pong'
+})
+</code></pre>
+      </section>
+      <section>
+        <h2>ipcRenderer</h2>
+        <pre><code class="language-javascript">const { ipcRenderer: ipc } = require('electron')
+
+let msg = ipc.sendSync('sync', 'ping')
+console.log(msg) // prints "pong"
+
+ipc.send('async', 'ping')
+
+ipc.on('async', (event, arg) => {
+  console.log(arg) // prints "pong"
+})
+</code></pre>
+      </section>
+      <section>
+        <h2>webContents</h2>
+        <pre><code class="language-javascript">// window is the BrowserWindow object
+// webContents is a property of the window object
+window.webContents.send('async', 'pong')
+
+window.webContents.sendInputEvent({
+  type: 'keyDown',
+  keyCode: 'Left'
+})
+</code></pre>
+      </section>
+      <section data-bespoke-hash="menu">
+        <h2>Menu</h2>
+        <pre><code class="language-javascript">// import Menu and Menu Item class
+const { Menu, MenuItem } = require('electron')
+// create a new instance of the menu
+const menu = new Menu()
+// add menu items
+menu.append(new MenuItem(options))
+menu.append(new MenuItem(options))
+menu.append(new MenuItem(options))
+</code></pre>
+      </section>
+      <section data-bespoke-hash="my-experience">
+        <h2 class="bullet">My experience</h2>
+        <ul>
+          <li>Cross platform is <strong>goodness</strong></li>
+          <li>Cross platform is <strong>hell</strong></li>
+        </ul>
+      </section>
+      <section>
+        <h3>My experience</h3>
+        <p>More we go deeper with the interaction between Electron and the OS, more we gain problems.</p><img src="./images/itsworking.gif" style="width: 400px; height: auto; margin-top: 20px" class="border-radius">
+      </section>
+      <section>
+        <h3>My experience</h3>
+        <p>Modularize everything and create internal, OS agnostic, APIs</p>
+        <pre class="small-text bullet"><code class="language-javascript">// returns the path of the configuration folder
+function confFolder () {
+  return process.platform === 'win32' ? 'win\path' : 'mac/path'
+}
+</code></pre>
+      </section>
+      <section>
+        <h3>My experience</h3>
+        <p>By convention Windows saves the configuration file inside the executable folder, while Mac and Linux have to create a hidden folder in the user's home.</p>
+        <pre><code class="language-javascript">let fconf = path.join(confFolder(), 'config.json')
+const conf = require(fconf)
+</code></pre>
+      </section>
+      <section>
+        <h3>Talking about APIs</h3>
+        <ul>
+          <li>You can build <strong>isomorphic</strong> APIs by using <em>Remote</em> API.</li>
+          <li>You can take advantage of <a href="https://github.com/delvedor/is-electron" target="_blank">is-electron</a> module.</li>
+          <li>
+            <pre class="small-text"><code class="language-javascript">const e = require('electron')
+const is = require('is-electron')
+function closeApp () {
+  if (is.main()) { // main process
+    e.app.quit()
+  } else { // renderer process
+    e.remote.app.quit()
+  }
+}
+is.main() ? exports.closeApp = closeApp :
+            window.closeApp = closeApp
+            </code></pre>
+          </li>
+        </ul>
+      </section>
+      <section>
+        <h3>My experience</h3>
+        <p>Some native third-party modules are compatible with a single OS</p><img src="./images/singleos.gif" style="width: 300px; height: auto; margin-top: 20px" class="border-radius">
+      </section>
+      <section>
+        <h3>My experience</h3>
+        <p>You will write tons of quickfix</p><img src="./images/quickfix.gif" style="width: 350px; height: auto; margin-bottom: 30px" class="border-radius bullet">
+        <ul>
+          <li>Code refactor will be your best friend</li>
+        </ul>
+      </section>
+      <section>
+        <h3>My experience</h3>
+        <ul>
+          <li>If you design pixel calculated windows pay attention, because Mac creates a window of a specific dimension plus the header.</li>
+          <li><strong>Windows will not.</strong></li>
+        </ul>
+      </section>
+      <section>
+        <h3>My experience</h3>
+        <p>Create a Windows installer is damn hard.</p><img src="./images/winInstaller.gif" style="width: 250px; height: auto; margin-top: 20px" class="border-radius">
+      </section>
+      <!-- section-->
+      <!--   h3 My experience-->
+      <!--   p Work with screen API under Windows is a <span style="color: #B71C1C"><strong>bloody mess</strong></span>.-->
+      <!--   img(src="./images/screen.gif" style="width: 350px; height: auto; margin-bottom: 20px").border-radius.bullet-->
+      <!--   ul-->
+      <!--     li If you really need to work with screen under Windows<br/>you can use <a href="https://github.com/delvedor/electron-screen" target="_blank">electron-screen</a> module-->
+      <!--     li <strong>Interact with Windows in general, is a mess.</strong>-->
+      <section>
+        <h3>My experience</h3>
+        <p><strong>Interact with Windows in general, is a mess.</strong></p><img src="./images/screen.gif" style="width: 350px; height: auto; margin-bottom: 20px" class="border-radius bullet">
+      </section>
+      <section>
+        <h2 class="bullet">The beauty of Electron</h2>
+        <ul>
+          <li>Very active community</li>
+          <li>Fast development cycle</li>
+          <li>You can build whatever you want!</li>
+        </ul>
+      </section>
+      <section data-bespoke-hash="built-with">
+        <h2 class="bullet">Built with Electron</h2>
+        <ul>
+          <li>Atom Editor</li>
+          <li>Slack</li>
+          <li>Microsoft VS Code</li>
+          <li>Nuclide</li>
+          <li>Strem.io</li>
+          <li>Wordpress.com</li>
+          <li>Postman</li>
+          <li>Google Play Music</li>
+          <li>Ionic Lab</li>
+          <li>Brave Browser</li>
+          <li>Rocket.chat</li>
+          <li><strong>This Presentation ;)</strong></li>
+        </ul>
+      </section>
+      <section>
+        <h4>How works this presentation</h4><img src="./images/how-slides.png" style="width: 600px; height: auto; margin-top: 10px;" class="border-radius">
+      </section>
+      <section>
+        <h2>Let's code!</h2>
+        <pre class="left-align"><code class="small-text">$ git clone https://github.com/delvedor/electron-workshop.git
+$ cd electron-workshop
+$ npm install
+$ npm start</code></pre>
+      </section>
+      <section data-bespoke-hash="useful-links">
+        <h2>Useful links</h2>
+        <p><a href="https://github.com/sindresorhus/awesome-electron" target="_blank">Awesome Electron</a></p>
+        <p><a href="https://github.com/electron-userland" target="_blank">Electron userland</a></p>
+      </section>
+      <section><img src="./images/LogoWebIsArt.png" style="width: 180px; height: auto; margin-bottom: 20px;">
+        <h1>Thanks!</h1>
+        <p>@delvedor on <a href="https://twitter.com/delvedor" target="_blank">Twitter</a> and <a href="https://github.com/delvedor" target="_blank">GitHub</a></p>
+        <p><a href="https://www.facebook.com/webisart.user.group/" target="_blank">facebook.com/webisart.user.group</a></p>
+        <script src="build/build.js"></script>
+      </section>
+    </article>
+  </body>
+</html>
