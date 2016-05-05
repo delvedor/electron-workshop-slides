@@ -56,6 +56,7 @@ html
           li Build System
           li Node Integration
           li Multi-context
+          li.small-text <em>Check <a href="https://github.com/electron/electron/blob/master/docs/development/atom-shell-vs-node-webkit.md" target="_blank">here</a></em>
 
       section(data-bespoke-hash="architecture")
         h2 How works Electron.js
@@ -76,7 +77,7 @@ html
       section(data-bespoke-hash="api")
         h3.bullet APIs
         ul
-          li <img src="./images/api.png" style="width: 370px; height: auto; margin-top: -25px" class="border-radius" />
+          li <img src="./images/api.png" alt="api" style="width: 370px; height: auto; margin-top: -25px" class="border-radius" />
 
       section
         h3.bullet APIs
@@ -92,7 +93,7 @@ html
         pre
           code.language-javascript.
             // import the app module from electron
-            const app = require('electron').app
+            const { app } = require('electron')
             // When application is ready
             app.on('ready', createWindow)
             // when all the windows of the app are closed
@@ -103,7 +104,7 @@ html
         pre
           code.language-javascript.
             // import the BrowserWindow module from electron
-            const BrowserWindow = require('electron').BrowserWindow
+            const { BrowserWindow } = require('electron')
             // create a new window
             let window = new BrowserWindow(options)
             // load an html file
@@ -116,7 +117,7 @@ html
       section
         p.bullet Browser Window options?
         ul
-          li <img src="./images/browser-options.png" style="width: 340px; height: auto; margin-top:-5px;" class="border-radius" />
+          li <img src="./images/browser-options.png" alt="browser options" style="width: 340px; height: auto; margin-top:-5px;" class="border-radius" />
 
       section(data-bespoke-hash="ipc")
         h2 ipc
@@ -129,7 +130,7 @@ html
         h2 ipcMain
         pre
           code.language-javascript.
-            const ipc = require('electron').ipcMain
+            const { ipcMain: ipc } = require('electron')
 
             ipc.on('async', (event, arg) => {
               console.log(arg) // prints "ping"
@@ -145,7 +146,7 @@ html
         h2 ipcRenderer
         pre
           code.language-javascript.
-            const ipc = require('electron').ipcRenderer
+            const { ipcRenderer: ipc } = require('electron')
 
             let msg = ipc.sendSync('sync', 'ping')
             console.log(msg) // prints "pong"
@@ -174,8 +175,7 @@ html
         pre
           code.language-javascript.
             // import Menu and Menu Item class
-            const Menu = require('electron').Menu
-            const MenuItem = require('electron').MenuItem
+            const { Menu, MenuItem } = require('electron')
             // create a new instance of the menu
             const menu = new Menu()
             // add menu items
@@ -205,6 +205,14 @@ html
             }
 
       section
+        h3 My experience
+        p By convention Windows saves the configuration file inside the executable folder, while Mac and Linux have to create a hidden folder in the user's home.
+        pre
+          code.language-javascript.
+            let fconf = path.join(confFolder(), 'config.json')
+            const conf = require(fconf)
+
+      section
         h3 Talking about APIs
         ul
           li You can build <strong>isomorphic</strong> APIs by using <em>Remote</em> API.
@@ -212,24 +220,17 @@ html
           li
             pre.small-text
               code.language-javascript.
+                const e = require('electron')
+                const is = require('is-electron')
                 function closeApp () {
-                  const e = require('electron')
                   if (is.main()) { // main process
-                    e.app.close()
+                    e.app.quit()
                   } else { // renderer process
-                    e.remote.app.close()
+                    e.remote.app.quit()
                   }
                 }
                 is.main() ? exports.closeApp = closeApp :
                             window.closeApp = closeApp
-
-      section
-        h3 My experience
-        p By convention Windows saves the configuration file inside the executable folder, while Mac and Linux have to create a hidden folder in the user's home.
-        pre
-          code.language-javascript.
-            let fconf = path.join(confFolder(), 'config.json')
-            const conf = require(fconf)
 
       section
         h3 My experience
@@ -254,14 +255,25 @@ html
         p Create a Windows installer is damn hard.
         img(src="./images/winInstaller.gif" style="width: 250px; height: auto; margin-top: 20px").border-radius
 
+      // section
+      //   h3 My experience
+      //   p Work with screen API under Windows is a <span style="color: #B71C1C"><strong>bloody mess</strong></span>.
+      //   img(src="./images/screen.gif" style="width: 350px; height: auto; margin-bottom: 20px").border-radius.bullet
+      //   ul
+      //     li If you really need to work with screen under Windows<br/>you can use <a href="https://github.com/delvedor/electron-screen" target="_blank">electron-screen</a> module
+      //     li <strong>Interact with Windows in general, is a mess.</strong>
+
       section
         h3 My experience
-        p Work with screen API under Windows is a <span style="color: #B71C1C"><strong>bloody mess</strong><span>.
+        p <strong>Interact with Windows in general, is a mess.</strong>
         img(src="./images/screen.gif" style="width: 350px; height: auto; margin-bottom: 20px").border-radius.bullet
-        ul
-          li If you really need to work with screen under Windows<br/>you can use <a href="https://github.com/delvedor/electron-screen" target="_blank">electron-screen</a> module
-          li <strong>Interact with Windows in general, is a mess.</strong>
 
+      section
+        h2.bullet The beauty of Electron
+        ul
+          li Very active community
+          li Fast development cycle
+          li You can build whatever you want!
 
       section(data-bespoke-hash="built-with")
         h2.bullet Built with Electron
@@ -291,6 +303,11 @@ html
             $ cd electron-workshop
             $ npm install
             $ npm start
+
+      section(data-bespoke-hash="useful-links")
+        h2 Useful links
+        p <a href="https://github.com/sindresorhus/awesome-electron" target="_blank">Awesome Electron</a>
+        p <a href="https://github.com/electron-userland" target="_blank">Electron userland</a>
 
       section
         img(src="./images/LogoWebIsArt.png" style="width: 180px; height: auto; margin-bottom: 20px;")
