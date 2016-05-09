@@ -166,6 +166,9 @@ window.webContents.sendInputEvent({
 })
 </code></pre>
       </section>
+      <section data-bespoke-hash="ipc-renderer-communication">
+        <h3>Renderer to Renderer communication</h3><img src="./images/ipcCommunication.png" style="width: 480px; height:auto; margin-top: 20px" class="border-radius">
+      </section>
       <section data-bespoke-hash="menu">
         <h2>Menu</h2>
         <pre><code class="language-javascript">// import Menu and Menu Item class
@@ -196,13 +199,18 @@ menu.append(new MenuItem(options))
 function confFolder () {
   return process.platform === 'win32' ? 'win\path' : 'mac/path'
 }
+
+function confFile () {
+  const { join } = require('path')
+  return join(confFolder(), 'config.json')
+}
 </code></pre>
       </section>
       <section>
         <h3>My experience</h3>
         <p>By convention Windows saves the configuration file inside the executable folder, while Mac and Linux have to create a hidden folder in the user's home.</p>
-        <pre><code class="language-javascript">let fconf = path.join(confFolder(), 'config.json')
-const conf = require(fconf)
+        <pre><code class="language-javascript">const conf = require(confFile())
+doSomething(conf.someProperty)
 </code></pre>
       </section>
       <section>
@@ -211,18 +219,20 @@ const conf = require(fconf)
           <li>You can build <strong>isomorphic</strong> APIs by using <em>Remote</em> API.</li>
           <li>You can take advantage of <a href="https://github.com/delvedor/is-electron" target="_blank">is-electron</a> module.</li>
           <li>
-            <pre class="small-text"><code class="language-javascript">const e = require('electron')
-const is = require('is-electron')
-function closeApp () {
-  if (is.main()) { // main process
-    e.app.quit()
-  } else { // renderer process
-    e.remote.app.quit()
+            <pre class="small-text"><code class="language-javascript">{
+  const e = require('electron')
+  const is = require('is-electron')
+  function closeApp () {
+    if (is.main()) { // main process
+      e.app.quit()
+    } else { // renderer process
+      e.remote.app.quit()
+    }
   }
+  is.main() ? exports.closeApp = closeAp
+            : window.closeApp = closeApp
 }
-is.main() ? exports.closeApp = closeApp :
-            window.closeApp = closeApp
-            </code></pre>
+</code></pre>
           </li>
         </ul>
       </section>
@@ -271,9 +281,9 @@ is.main() ? exports.closeApp = closeApp :
         <h2 class="bullet">Built with Electron</h2>
         <ul>
           <li>Atom Editor</li>
-          <li>Slack</li>
           <li>Microsoft VS Code</li>
           <li>Nuclide</li>
+          <li>Slack</li>
           <li>Strem.io</li>
           <li>Wordpress.com</li>
           <li>Postman</li>
