@@ -170,6 +170,10 @@ html
               keyCode: 'Left'
             })
 
+      section(data-bespoke-hash="ipc-renderer-communication")
+        h3 Renderer to Renderer communication
+        img(src="./images/ipcCommunication.png" style="width: 480px; height:auto; margin-top: 20px").border-radius
+        
       section(data-bespoke-hash="menu")
         h2 Menu
         pre
@@ -204,13 +208,18 @@ html
               return process.platform === 'win32' ? 'win\path' : 'mac/path'
             }
 
+            function confFile () {
+              const { join } = require('path')
+              return join(confFolder(), 'config.json')
+            }
+
       section
         h3 My experience
         p By convention Windows saves the configuration file inside the executable folder, while Mac and Linux have to create a hidden folder in the user's home.
         pre
           code.language-javascript.
-            let fconf = path.join(confFolder(), 'config.json')
-            const conf = require(fconf)
+            const conf = require(confFile())
+            doSomething(conf.someProperty)
 
       section
         h3 Talking about APIs
@@ -220,17 +229,19 @@ html
           li
             pre.small-text
               code.language-javascript.
-                const e = require('electron')
-                const is = require('is-electron')
-                function closeApp () {
-                  if (is.main()) { // main process
-                    e.app.quit()
-                  } else { // renderer process
-                    e.remote.app.quit()
+                {
+                  const e = require('electron')
+                  const is = require('is-electron')
+                  function closeApp () {
+                    if (is.main()) { // main process
+                      e.app.quit()
+                    } else { // renderer process
+                      e.remote.app.quit()
+                    }
                   }
+                  is.main() ? exports.closeApp = closeAp
+                            : window.closeApp = closeApp
                 }
-                is.main() ? exports.closeApp = closeApp :
-                            window.closeApp = closeApp
 
       section
         h3 My experience
@@ -279,9 +290,9 @@ html
         h2.bullet Built with Electron
         ul
           li Atom Editor
-          li Slack
           li Microsoft VS Code
           li Nuclide
+          li Slack
           li Strem.io
           li Wordpress.com
           li Postman
