@@ -217,11 +217,11 @@ doSomething(conf.someProperty)
         <h3>Talking about APIs</h3>
         <ul>
           <li>You can build <strong>isomorphic</strong> APIs by using <em>Remote</em> API.</li>
-          <li>You can take advantage of <a href="https://github.com/delvedor/is-electron" target="_blank">is-electron</a> module.</li>
+          <li>You can take advantage of <a href="https://github.com/delvedor/electron-is" target="_blank">electron-is</a> module.</li>
           <li>
             <pre class="small-text"><code class="language-javascript">{
   const e = require('electron')
-  const is = require('is-electron')
+  const is = require('electron-is')
   function closeApp () {
     if (is.main()) { // main process
       e.app.quit()
