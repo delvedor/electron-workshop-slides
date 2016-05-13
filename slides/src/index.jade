@@ -225,13 +225,13 @@ html
         h3 Talking about APIs
         ul
           li You can build <strong>isomorphic</strong> APIs by using <em>Remote</em> API.
-          li You can take advantage of <a href="https://github.com/delvedor/is-electron" target="_blank">is-electron</a> module.
+          li You can take advantage of <a href="https://github.com/delvedor/electron-is" target="_blank">electron-is</a> module.
           li
             pre.small-text
               code.language-javascript.
                 {
                   const e = require('electron')
-                  const is = require('is-electron')
+                  const is = require('electron-is')
                   function closeApp () {
                     if (is.main()) { // main process
                       e.app.quit()
